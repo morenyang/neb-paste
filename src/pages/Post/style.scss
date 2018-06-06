@@ -1,0 +1,19 @@
+@import "../../asserts/scss/style";
+
+.bdSub {
+  font-size: 1.5rem;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  font-weight: 300;
+  max-width: 80%;
+}
+
+.pasteWrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  button{
+    width: 50%;
+  }
+}

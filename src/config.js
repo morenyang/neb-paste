@@ -1,6 +1,7 @@
 const LANGUAGES = [
   'bat',
-  'coffee',
+  'c',
+  'coffeescript',
   'cpp',
   'csharp',
   'csp',
@@ -12,15 +13,17 @@ const LANGUAGES = [
   'html',
   'ini',
   'java',
+  'javascript',
   'json',
   'less',
   'lua',
   'markdown',
   'msdax',
   'mysql',
-  'objective',
+  'objective-c',
   'pgsql',
   'php',
+  'plaintext',
   'postiats',
   'powershell',
   'pug',
@@ -30,10 +33,12 @@ const LANGUAGES = [
   'redis',
   'redshift',
   'ruby',
+  'rust',
   'sb',
   'scss',
-  'solidity',
+  'sol',
   'sql',
+  'st',
   'swift',
   'typescript',
   'vb',
@@ -41,4 +46,4 @@ const LANGUAGES = [
   'yaml'
 ];
 
-export { LANGUAGES };
+export {LANGUAGES};

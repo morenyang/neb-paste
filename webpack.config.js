@@ -26,8 +26,30 @@ module.exports = {
         test: /\.css$/,
         use: [
           MiniCssExtreactPlugin.loader,
-          { loader: 'css-loader' },
+          {loader: 'css-loader'},
           'postcss-loader'
+        ]
+      },
+      {
+        test: /\.(sass|scss)$/,
+        use: [
+          MiniCssExtreactPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[name]_[local]_[hash:base64:6]',
+              camelCase: true
+            }
+          },
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              errLogToConsole: true,
+            }
+          }
         ]
       }
     ]
