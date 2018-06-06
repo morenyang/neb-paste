@@ -1,0 +1,38 @@
+{
+  "name": "neb-paste",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/morenyang/neb-paste.git",
+  "author": "Moren YANG <morenyang88@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development BABEL_ENV=development webpack-dev-server --mode=development --open --hot",
+    "build": "cross-env NODE_ENV=production BABEL_ENV=production webpack --mode=production"
+  },
+  "dependencies": {
+    "autoprefixer": "^8.6.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-react-app": "^3.1.1",
+    "babel-runtime": "^6.26.0",
+    "bootstrap": "^4.1.1",
+    "cross-env": "^5.1.6",
+    "css-loader": "^0.28.11",
+    "history": "^4.7.2",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.0",
+    "monaco-editor-webpack-plugin": "^1.2.1",
+    "postcss-flexbugs-fixes": "^3.3.1",
+    "postcss-loader": "^2.1.5",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-hot-loader": "^4.3.0",
+    "react-monaco-editor": "^0.17.2",
+    "react-router-dom": "^4.2.2",
+    "reactstrap": "^6.1.0",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "webpack": "^4.11.1",
+    "webpack-cli": "^3.0.2",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
