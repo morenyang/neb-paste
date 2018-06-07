@@ -117,7 +117,7 @@ class PastedPage extends React.Component {
                 <br/><code>{this.state.hash}</code>
               </p>
               <p>You can see your code after transaction completed on <br/><Link
-                to={`/pasted/${this.state.hash}`}>{`${PROD_URL}/pasted/${this.state.hash}`}</Link>,<br/>
+                to={`/pasted/${this.state.hash}`}>{`${PROD_URL}/#/pasted/${this.state.hash}`}</Link>,<br/>
                 keep it or share it with your friend. </p>
             </ModalBody>
             <ModalFooter>
