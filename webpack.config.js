@@ -5,13 +5,38 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtreactPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const UglifyPlugin = require('webpack-parallel-uglify-plugin')
 const HappyPack = require('happypack')
 const os = require('os');
 
 const threadPool = HappyPack.ThreadPool({size: os.cpus().length});
 
 const BuildPlugins = [
-  new UglifyJSPlugin(),
+  new UglifyPlugin({
+    cacheDir: 'output/cache',
+    uglifyES: {
+      compress: {
+        drop_debugger: true,
+        pure_funcs: [
+          // 禁用console.debug
+          'console.debug',
+        ],
+        warnings: false,
+        // Disabled because of an issue with Uglify breaking seemingly valid code:
+        // https://github.com/facebookincubator/create-react-app/issues/2376
+        // Pending further investigation:
+        // https://github.com/mishoo/UglifyJS2/issues/2011
+        comparisons: false,
+      },
+      output: {
+        comments: false,
+        // Turned on because emoji and regex is not minified properly using default
+        // https://github.com/facebookincubator/create-react-app/issues/2488
+        ascii_only: true,
+      },
+    },
+    sourceMap: false,
+  }),
 ];
 
 getBuildPlugins = process.env.NODE_ENV === 'production' ? BuildPlugins : [];
