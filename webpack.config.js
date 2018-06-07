@@ -50,7 +50,8 @@ getExternals = process.env.NODE_ENV === 'production' ? {
 module.exports = {
   entry: './src/index.js',
   output: {
-    filename: '[name].[hash:8].bundle.js',
+    filename: '[name].[chunkhash:8].bundle.js',
+    chunkFilename: '[name].[chunkhash:8].chunk.js',
     path: path.resolve(__dirname, 'build')
   },
   externals: getExternals,
