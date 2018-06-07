@@ -61,7 +61,7 @@ class PastedPage extends React.Component {
 
   hideModal = () => {
     this.setState({
-      showModal: true,
+      showModal: false ,
     })
   };
 
