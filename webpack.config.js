@@ -1,12 +1,11 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtreactPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const UglifyPlugin = require('webpack-parallel-uglify-plugin')
-const HappyPack = require('happypack')
+const UglifyPlugin = require('webpack-parallel-uglify-plugin');
+const HappyPack = require('happypack');
 const os = require('os');
 
 const threadPool = HappyPack.ThreadPool({size: os.cpus().length});
@@ -45,6 +44,7 @@ getExternals = process.env.NODE_ENV === 'production' ? {
   'react-dom': 'ReactDOM',
   'history': 'History',
   'react-router-dom': 'ReactRouterDOM',
+  'reactstrap': 'Reactstrap'
 } : {};
 
 module.exports = {

@@ -54,8 +54,6 @@ class PastedPage extends React.Component {
     const {author, code, language} = this.state;
     push(hash, qs.stringify({author, code, language}), function () {
       _self.setState({showModal: true});
-      console.log(111);
-      console.log(arguments)
     })
   };
 
