@@ -17,6 +17,13 @@ class Editor extends React.Component {
     const options = {
       selectOnLineNumbers: true
     };
+
+    const requireConfig = {
+      url: 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.1/require.min.js',
+      paths: {
+        vs: 'https://as.alipayobjects.com/g/cicada/monaco-editor-mirror/0.6.1/min/vs'
+      }
+    };
     return (
       <MonacoEditor
         height="600"
@@ -25,6 +32,7 @@ class Editor extends React.Component {
         value={this.props.code}
         options={options}
         onChange={this.onChange}
+        requireConfig={requireConfig}
         editorDidMount={this.editorDidMount}
       />
     );
