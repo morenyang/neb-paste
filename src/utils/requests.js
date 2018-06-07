@@ -11,7 +11,8 @@ const neb = new nebulas.Neb();
 const nebPay = new Nebpay();
 
 
-neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+// neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
 function get(key) {
   let from = Account.NewAccount().getAddressString();
@@ -35,6 +36,8 @@ function get(key) {
     })
 }
 
+let serialNumber;
+
 function push(key, val, cb) {
   let value = "0";
   let callFunction = "save";
@@ -42,7 +45,7 @@ function push(key, val, cb) {
 
   serialNumber = nebPay.call(DAPP_ADDRESS, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
     listener: cb,       //设置listener, 处理交易返回信息
-    callback: Nebpay.config.mainnetUrl
+    callback: Nebpay.config.testnetUrl
   });
 }
 

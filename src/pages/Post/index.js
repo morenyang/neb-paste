@@ -3,19 +3,36 @@
  */
 
 import React from 'react';
-import {Container, Form, FormGroup, Label, Input, Col, Row, Button} from 'reactstrap';
+import {
+  Container,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Col,
+  Row,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from 'reactstrap';
 import Editor from '../../components/Editor/index'
 import style from './style.scss'
-import {LANGUAGES} from '../../config'
+import {LANGUAGES, PROD_URL} from '../../config'
 import uuid from 'uuid'
 import objectHash from 'object-hash'
 import {push} from '../../utils/requests'
+import qs from 'qs'
+import {Link} from 'react-router-dom'
 
 class PastedPage extends React.Component {
   state = {
     author: '',
     language: 'javascript',
-    code: ''
+    code: '',
+    showModal: false,
+    hash: ''
   };
 
   onEditorChange = (newVal) => {
@@ -32,10 +49,19 @@ class PastedPage extends React.Component {
 
   handleSubmit = () => {
     let hash = objectHash({...this.state, uuid: uuid()});
-    console.log(hash);
-    push(hash, JSON.stringify({...this.state}), function () {
+    this.setState({hash});
+    const _self = this;
+    const {author, code, language} = this.state;
+    push(hash, qs.stringify({author, code, language}), function () {
+      _self.setState({showModal: true});
       console.log(111);
       console.log(arguments)
+    })
+  };
+
+  hideModal = () => {
+    this.setState({
+      showModal: true,
     })
   };
 
@@ -86,7 +112,20 @@ class PastedPage extends React.Component {
               </div>
             </FormGroup>
           </Form>
-
+          <Modal isOpen={this.state.showModal} toggle={this.hideModal} className={style.finishedModal}>
+            <ModalHeader toggle={this.toggle}>Saving your code</ModalHeader>
+            <ModalBody>
+              <p>Remember the hash of your code:
+                <br/><code>{this.state.hash}</code>
+              </p>
+              <p>You can see your code after transaction completed on <br/><Link
+                to={`/pasted/${this.state.hash}`}>{`${PROD_URL}/pasted/${this.state.hash}`}</Link>,<br/>
+                keep it or share it with your friend. </p>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.hideModal}>Finish</Button>{' '}
+            </ModalFooter>
+          </Modal>
         </div>
       </Container>
     )

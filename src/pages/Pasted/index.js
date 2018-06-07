@@ -4,36 +4,50 @@ import Editor from '../../components/Editor/index'
 import style from './style.scss'
 import {get} from '../../utils/requests'
 import {LANGUAGES} from '../../config'
+import qs from 'qs'
 
 class PastedPage extends React.Component {
   state = {
+    urlHash: '',
     hash: '',
     author: '',
-    code: '',
-    language: ''
+    code: null,
+    language: 'javascript',
+    shouldFetchData: false
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let params = {...nextProps.match.params};
-    if (params.hasOwnProperty('hash') && params.hash !== prevState.hash) {
+    if (params.hasOwnProperty('hash') && params.hash !== prevState.urlHash) {
       return {
         author: '',
-        code: '',
+        code: null,
         language: '',
-        hash: params.hash
+        hash: params.hash,
+        urlHash: params.hash,
+        shouldFetchData: true,
       }
-    } else {
+    } else if (!params.hasOwnProperty('hash') && prevState.urlHash) {
       return {
         author: '',
-        code: '',
+        code: null,
         language: '',
-        hash: ''
+        hash: '',
+        urlHash: '',
+        shouldFetchData: true,
       }
     }
+    return null
   }
 
   componentDidMount() {
-    if (this.state.hash) {
+    if (this.state.code === null && this.state.urlHash) {
+      this.handleFetchData()
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.code === null) {
       this.handleFetchData()
     }
   }
@@ -45,6 +59,10 @@ class PastedPage extends React.Component {
   onHashChange = (e) => {
     this.setState({hash: e.target.value})
   };
+
+  handleGetClick = () => {
+    this.props.history.push(`/pasted/${this.state.hash}`)
+  }
 
   render() {
     const renderOptions = () => LANGUAGES.map(item => (
@@ -65,7 +83,7 @@ class PastedPage extends React.Component {
                 </FormGroup>
               </Col>
               <Col md={1} className={style.pasteWrapper}>
-                <Button disabled={!this.state.hash} onClick={this.handleFetchData}>Get</Button>
+                <Button disabled={!this.state.hash} onClick={this.handleGetClick}>Get</Button>
               </Col>
             </Row>
             <Row>
@@ -99,12 +117,14 @@ class PastedPage extends React.Component {
   }
 
   handleFetchData = () => {
-    get(this.state.hash)
+    get(this.state.urlHash)
       .then(result => {
         let resultString = JSON.stringify(result);
         if (resultString.search("key") !== -1 && resultString.search("value") !== -1) {
           result = JSON.parse(result);
-          this.setState(result)
+          let value = qs.parse(result.value);
+          console.warn(value)
+          this.setState({...value, shouldFetchData: false})
         }
       })
   }

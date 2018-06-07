@@ -6,6 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtreactPlugin = require('mini-css-extract-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
+const BuildPlugins = [
+  new UglifyJSPlugin(),
+];
+
+getBuildPlugins = process.env.NODE_ENV === 'production' ? BuildPlugins : [];
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -55,8 +61,8 @@ module.exports = {
     ]
   },
   plugins: [
+    ...getBuildPlugins,
     new MonacoWebpackPlugin(),
-    // new UglifyJSPlugin(),
     new HtmlWebpackPlugin({
       template: './public/index.html'
     }),
