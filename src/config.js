@@ -46,4 +46,6 @@ const LANGUAGES = [
   'yaml'
 ];
 
-export {LANGUAGES};
+const DAPP_ADDRESS = "n1RSqqqz1Rr5T9DGd3N9kUc4M9QERZpQ7By";
+
+export {LANGUAGES, DAPP_ADDRESS};

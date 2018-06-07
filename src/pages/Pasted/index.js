@@ -1,15 +1,112 @@
 import React from 'react';
-import {Container} from 'reactstrap';
+import {Container, Input, Form, FormGroup, Label, Row, Col, Button} from 'reactstrap';
 import Editor from '../../components/Editor/index'
+import style from './style.scss'
+import {get} from '../../utils/requests'
+import {LANGUAGES} from '../../config'
 
 class PastedPage extends React.Component {
+  state = {
+    hash: '',
+    author: '',
+    code: '',
+    language: ''
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let params = {...nextProps.match.params};
+    if (params.hasOwnProperty('hash') && params.hash !== prevState.hash) {
+      return {
+        author: '',
+        code: '',
+        language: '',
+        hash: params.hash
+      }
+    } else {
+      return {
+        author: '',
+        code: '',
+        language: '',
+        hash: ''
+      }
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.hash) {
+      this.handleFetchData()
+    }
+  }
+
+  onLanguageChange = (e) => {
+    this.setState({language: e.target.value})
+  };
+
+  onHashChange = (e) => {
+    this.setState({hash: e.target.value})
+  };
+
   render() {
+    const renderOptions = () => LANGUAGES.map(item => (
+      <option value={item} key={item}>{item}</option>
+    ));
     return (
       <Container>
-
-        <Editor/>
+        <h1 className={style.mainTitle}>
+          Pasted {this.state.author ? `form ${this.state.author}` : ''}
+        </h1>
+        <div>
+          <Form>
+            <Row>
+              <Col md={11}>
+                <FormGroup>
+                  <Label>Pasted Hash</Label>
+                  <Input value={this.state.hash} onChange={this.onHashChange}/>
+                </FormGroup>
+              </Col>
+              <Col md={1} className={style.pasteWrapper}>
+                <Button disabled={!this.state.hash} onClick={this.handleFetchData}>Get</Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={5}>
+                <FormGroup>
+                  <Label htmlFor="author">Poster</Label>
+                  <Input id={"author"} placeholder={""} value={this.state.author} disabled
+                         className={style.authorInput}/>
+                </FormGroup>
+              </Col>
+              <Col md={4}>
+                <FormGroup>
+                  <Label htmlFor="language">Language</Label>
+                  <Input type={'select'} value={this.state.language} onChange={this.onLanguageChange}>
+                    {renderOptions()}
+                  </Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <FormGroup>
+              <Label htmlFor="editor">Content</Label>
+              <div className={style.editor}>
+                <Editor id={'editor'} code={this.state.code} onEditorChange={this.onEditorChange}
+                        language={this.state.language}/>
+              </div>
+            </FormGroup>
+          </Form>
+        </div>
       </Container>
     )
+  }
+
+  handleFetchData = () => {
+    get(this.state.hash)
+      .then(result => {
+        let resultString = JSON.stringify(result);
+        if (resultString.search("key") !== -1 && resultString.search("value") !== -1) {
+          result = JSON.parse(result);
+          this.setState(result)
+        }
+      })
   }
 }
 

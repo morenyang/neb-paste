@@ -9,3 +9,10 @@ h1.mainTitle {
   border-radius: .25rem;
   overflow: hidden;
 }
+
+.pasteWrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}

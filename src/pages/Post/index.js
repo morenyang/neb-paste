@@ -7,6 +7,9 @@ import {Container, Form, FormGroup, Label, Input, Col, Row, Button} from 'reacts
 import Editor from '../../components/Editor/index'
 import style from './style.scss'
 import {LANGUAGES} from '../../config'
+import uuid from 'uuid'
+import objectHash from 'object-hash'
+import {push} from '../../utils/requests'
 
 class PastedPage extends React.Component {
   state = {
@@ -25,6 +28,15 @@ class PastedPage extends React.Component {
 
   onLanguageChange = (e) => {
     this.setState({language: e.target.value})
+  };
+
+  handleSubmit = () => {
+    let hash = objectHash({...this.state, uuid: uuid()});
+    console.log(hash);
+    push(hash, JSON.stringify({...this.state}), function () {
+      console.log(111);
+      console.log(arguments)
+    })
   };
 
   render() {
@@ -61,7 +73,7 @@ class PastedPage extends React.Component {
                 </FormGroup>
               </Col>
               <Col md={3} className={style.pasteWrapper}>
-                <Button disabled={btnDisabled}>
+                <Button disabled={btnDisabled} onClick={this.handleSubmit}>
                   Paste
                 </Button>
               </Col>

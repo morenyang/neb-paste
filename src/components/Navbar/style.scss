@@ -8,3 +8,18 @@
   color: #ccc;
   font-weight: 300;
 }
+
+.navBar {
+  flex-direction: row !important;
+  & > li + li {
+    padding-left: 30px;
+  }
+}
+
+.navLink {
+  color: rgba(0, 0, 0, .5);
+  &:hover {
+    text-decoration: none;
+    color: #333;
+  }
+}
