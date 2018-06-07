@@ -13,7 +13,7 @@ class PastedPage extends React.Component {
     author: '',
     code: null,
     language: 'javascript',
-    shouldFetchData: false
+    authorWallet: '',
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -25,7 +25,6 @@ class PastedPage extends React.Component {
         language: '',
         hash: params.hash,
         urlHash: params.hash,
-        shouldFetchData: true,
       }
     } else if (!params.hasOwnProperty('hash') && prevState.urlHash) {
       return {
@@ -34,7 +33,6 @@ class PastedPage extends React.Component {
         language: '',
         hash: '',
         urlHash: '',
-        shouldFetchData: true,
       }
     }
     return null
@@ -62,7 +60,7 @@ class PastedPage extends React.Component {
 
   handleGetClick = () => {
     this.props.history.push(`/pasted/${this.state.hash}`)
-  }
+  };
 
   render() {
     const renderOptions = () => LANGUAGES.map(item => (
@@ -87,19 +85,27 @@ class PastedPage extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col md={5}>
+              <Col md={4}>
                 <FormGroup>
                   <Label htmlFor="author">Poster</Label>
                   <Input id={"author"} placeholder={""} value={this.state.author} disabled
                          className={style.authorInput}/>
                 </FormGroup>
               </Col>
-              <Col md={4}>
+              <Col md={3}>
                 <FormGroup>
                   <Label htmlFor="language">Language</Label>
                   <Input type={'select'} value={this.state.language} onChange={this.onLanguageChange}>
                     {renderOptions()}
                   </Input>
+                </FormGroup>
+              </Col>
+              <Col md={3}>
+                <FormGroup>
+                  <Label>Author Account</Label>
+                  <Label className={style.authorAccount}>
+                    {this.state.authorWallet}
+                  </Label>
                 </FormGroup>
               </Col>
             </Row>
@@ -123,8 +129,9 @@ class PastedPage extends React.Component {
         if (resultString.search("key") !== -1 && resultString.search("value") !== -1) {
           result = JSON.parse(result);
           let value = qs.parse(result.value);
-          console.warn(value)
-          this.setState({...value, shouldFetchData: false})
+          console.debug(result.author);
+          console.debug(value);
+          this.setState({...value, authorWallet: result.author});
         }
       })
   }

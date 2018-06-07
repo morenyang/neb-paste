@@ -16,3 +16,7 @@ h1.mainTitle {
   justify-content: flex-end;
   margin-bottom: 1rem;
 }
+
+:global(body) {
+  font-family: 'Roboto', sans-serif;
+}

@@ -26,6 +26,11 @@ class NavigationBar extends React.Component {
                 Pasted
               </Link>
             </NavItem>
+            <NavItem>
+              <a href={'https://github.com/morenyang/neb-paste/'} className={style.navLink} target={"_blank"}>
+                Github
+              </a>
+            </NavItem>
           </Nav>
         </Container>
       </Navbar>

@@ -1,11 +1,16 @@
 @import "../../asserts/scss/style";
 
-.pasteWrapper{
-  button{
+.pasteWrapper {
+  button {
     width: 100%;
   }
 }
 
-.authorInput{
+.authorInput {
   background: white !important;
+}
+
+.authorAccount {
+  height: calc(2.25rem + 2px);
+  padding: .375rem 0;
 }

@@ -46,7 +46,7 @@ const LANGUAGES = [
   'yaml'
 ];
 
-const DAPP_ADDRESS = "n1szzpKs6zgZrsgxU56KDHxZxvdK8oX2ANc";
+const DAPP_ADDRESS = "n1kg8Gd97NrCaM4mq4etP6CFzf2dqWQASQ5";
 const PROD_URL = "morenyang.github.io/neb-paste";
 
 export {LANGUAGES, DAPP_ADDRESS, PROD_URL};

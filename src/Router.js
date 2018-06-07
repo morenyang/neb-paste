@@ -4,6 +4,7 @@ import {createHashHistory} from 'history';
 import Post from './pages/Post';
 import Pasted from './pages/Pasted';
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 const history = createHashHistory();
 const MainRouter = (...props) => (
@@ -16,6 +17,7 @@ const MainRouter = (...props) => (
         <Route component={Pasted} path={'/pasted/:hash'} exact/>
         <Redirect to={'/clipboard'}/>
       </Switch>
+      <Footer/>
     </Fragment>
   </Router>
 );
