@@ -9,7 +9,7 @@ after_success:
   - mv build dist
   - git add dist
   - git commit -m "deploy on gh-pages `date`"
-  - git subtree push --prefix=dist "https://${GITHUB_ACCESS_TOKEN}@github.com/morenyang/neb-paste.git" gh-pages
+  - git subtree push -f --prefix=dist "https://${GITHUB_ACCESS_TOKEN}@github.com/morenyang/neb-paste.git" gh-pages
 branches:
   only:
     - master
