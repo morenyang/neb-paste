@@ -12,6 +12,7 @@ const nebPay = new Nebpay();
 
 
 neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+
 // neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
 function get(key) {
@@ -31,7 +32,7 @@ function get(key) {
   return neb.api.call(from, DAPP_ADDRESS, value, nonce, gas_price, gas_limit, contract)
     .then(resp => {
       let result = resp.result;
-      console.debug(`return of rpc call : ${JSON.stringify(result)}`)
+      console.debug(`return of rpc call : ${JSON.stringify(result)}`);
       return result;
     })
 }
@@ -49,4 +50,15 @@ function push(key, val, cb) {
   });
 }
 
-export {get, push}
+function queryPayment() {
+  return nebPay.queryPayInfo(serialNumber, {callback: Nebpay.config.mainnetUrl})
+    .then(resp => {
+      console.debug(`result ${resp}`);
+      return JSON.parse(resp)
+    })
+    .catch(err => {
+      console.error(err.toString())
+    })
+}
+
+export {get, push, serialNumber, queryPayment}

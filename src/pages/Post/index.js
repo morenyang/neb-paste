@@ -22,7 +22,7 @@ import style from './style.scss'
 import {LANGUAGES, PROD_URL} from '../../config'
 import uuid from 'uuid'
 import objectHash from 'object-hash'
-import {push} from '../../utils/requests'
+import {push, queryPayment} from '../../utils/requests'
 import qs from 'qs'
 import {Link} from 'react-router-dom'
 
@@ -32,8 +32,12 @@ class PastedPage extends React.Component {
     language: 'javascript',
     code: '',
     showModal: false,
-    hash: ''
+    hash: '',
+    fetchingResult: true,
+    paymentSuccess: false
   };
+
+  intervalQuery = null;
 
   onEditorChange = (newVal) => {
     this.setState({code: newVal})
@@ -48,20 +52,40 @@ class PastedPage extends React.Component {
   };
 
   handleSubmit = () => {
+    this.clearIntervalQuery();
     let hash = objectHash({...this.state, uuid: uuid()});
     this.setState({hash});
     const _self = this;
     const {author, code, language} = this.state;
     push(hash, qs.stringify({author, code, language}), function () {
-      _self.setState({showModal: true});
+      _self.setState({showModal: true, fetchingResult: true, paymentSuccess: false});
+      _self.intervalQuery = setInterval(() => {
+        queryPayment()
+          .then(res => {
+            if (res.code === 0) {
+              _self.setState({fetchingResult: false, paymentSuccess: true});
+              _self.clearIntervalQuery();
+            }
+          })
+      }, 1000)
     })
   };
 
   hideModal = () => {
     this.setState({
-      showModal: false ,
+      showModal: false,
     })
   };
+
+  clearIntervalQuery = () => {
+    if (this.intervalQuery) {
+      clearInterval(this.intervalQuery)
+    }
+  };
+
+  componentWillUnmount() {
+    this.clearIntervalQuery();
+  }
 
   render() {
     const renderOptions = () => LANGUAGES.map(item => (
@@ -110,18 +134,27 @@ class PastedPage extends React.Component {
               </div>
             </FormGroup>
           </Form>
-          <Modal isOpen={this.state.showModal} toggle={this.hideModal} className={style.finishedModal}>
-            <ModalHeader toggle={this.toggle}>Saving your code</ModalHeader>
+          <Modal isOpen={this.state.showModal} className={style.finishedModal}>
+            <ModalHeader
+              toggle={this.toggle}>{this.state.fetchingResult ? 'Saving your code' : this.state.paymentSuccess ? 'Successfully save your code' : 'Failed save your code'}</ModalHeader>
             <ModalBody>
               <p>Remember the hash of your code:
                 <br/><code>{this.state.hash}</code>
               </p>
-              <p>You can see your code after transaction completed on <br/><Link
+              <p>You can see your code {this.state.fetchingResult ? 'after transaction completed ' : ''} on <br/><Link
                 to={`/pasted/${this.state.hash}`}>{`${PROD_URL}/#/pasted/${this.state.hash}`}</Link>,<br/>
                 keep it or share it with your friend. </p>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={this.hideModal}>Finish</Button>{' '}
+              {
+                this.state.fetchingResult ?
+                  <Button onClick={this.hideModal}>
+                    Cancel
+                  </Button> : null
+              }
+              <Button color="primary" onClick={this.hideModal} disabled={this.state.fetchingResult}>
+                {this.state.fetchingResult ? 'Loading...' : 'Finish'}
+              </Button>
             </ModalFooter>
           </Modal>
         </div>
