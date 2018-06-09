@@ -62,19 +62,23 @@ class PastedPage extends React.Component {
       _self.intervalQuery = setInterval(() => {
         queryPayment()
           .then(res => {
-            if (res.code === 0) {
+            if (res.code === 0 && res.data.status === 1) {
               _self.setState({fetchingResult: false, paymentSuccess: true});
+              _self.clearIntervalQuery();
+            } else if (res.code === 1) {
+              _self.setState({fetchingResult: false, paymentSuccess: false});
               _self.clearIntervalQuery();
             }
           })
-      }, 1000)
+      }, 3000)
     })
   };
 
   hideModal = () => {
     this.setState({
       showModal: false,
-    })
+    });
+    this.clearIntervalQuery();
   };
 
   clearIntervalQuery = () => {
@@ -91,6 +95,20 @@ class PastedPage extends React.Component {
     const renderOptions = () => LANGUAGES.map(item => (
       <option value={item} key={item}>{item}</option>
     ));
+
+    const renderBody = () => {
+      return (
+        this.state.fetchingResult ? <p>Loading...</p> : !this.state.paymentSuccess ? <p>Transaction canceled. </p> :
+          <React.Fragment>
+            <p>Remember the hash of your code:
+              <br/><code>{this.state.hash}</code>
+            </p>
+            <p>You can see your code on <br/><Link
+              to={`/pasted/${this.state.hash}`}>{`${PROD_URL}/#/pasted/${this.state.hash}`}</Link>,<br/>
+              keep it or share it with your friend. </p>
+          </React.Fragment>
+      )
+    };
     const btnDisabled = !this.state.author || !this.state.code;
     return (
       <Container>
@@ -138,12 +156,7 @@ class PastedPage extends React.Component {
             <ModalHeader
               toggle={this.toggle}>{this.state.fetchingResult ? 'Saving your code' : this.state.paymentSuccess ? 'Successfully save your code' : 'Failed save your code'}</ModalHeader>
             <ModalBody>
-              <p>Remember the hash of your code:
-                <br/><code>{this.state.hash}</code>
-              </p>
-              <p>You can see your code {this.state.fetchingResult ? 'after transaction completed ' : ''} on <br/><Link
-                to={`/pasted/${this.state.hash}`}>{`${PROD_URL}/#/pasted/${this.state.hash}`}</Link>,<br/>
-                keep it or share it with your friend. </p>
+              {renderBody()}
             </ModalBody>
             <ModalFooter>
               {
