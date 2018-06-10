@@ -121,7 +121,8 @@ class PastedPage extends React.Component {
               <p>Extension wallet is not installed, please install it first. Otherwise your code may not be able to
                 publish. </p>
               <hr/>
-              <p><a href="https://github.com/nebulasio/WebExtensionWallet">Get more information here. </a></p>
+              <p><a href="https://github.com/nebulasio/WebExtensionWallet" target="_blank">Get more information
+                here. </a></p>
             </Alert>
             : null
         }
