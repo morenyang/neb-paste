@@ -24,3 +24,15 @@
   width: 500px !important;
   margin-bottom: 250px !important;
 }
+
+.alert {
+  h2, h3, h4 {
+    font-weight: 300;
+  }
+  p {
+    margin: 0;
+  }
+  a {
+    color: inherit;
+  }
+}

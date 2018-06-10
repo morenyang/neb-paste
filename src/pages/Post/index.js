@@ -15,7 +15,8 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  Alert
 } from 'reactstrap';
 import Editor from '../../components/Editor/index'
 import style from './style.scss'
@@ -34,7 +35,8 @@ class PastedPage extends React.Component {
     showModal: false,
     hash: '',
     fetchingResult: true,
-    paymentSuccess: false
+    paymentSuccess: false,
+    existWallet: typeof(window.webExtensionWallet) !== "undefined"
   };
 
   intervalQuery = null;
@@ -112,6 +114,17 @@ class PastedPage extends React.Component {
     const btnDisabled = !this.state.author || !this.state.code;
     return (
       <Container>
+        {
+          !this.state.existWallet ?
+            <Alert color={'warning'} className={style.alert}>
+              <h4 className="alert-heading">Please install Extension Wallet</h4>
+              <p>Extension wallet is not installed, please install it first. Otherwise your code may not be able to
+                publish. </p>
+              <hr/>
+              <p><a href="https://github.com/nebulasio/WebExtensionWallet">Get more information here. </a></p>
+            </Alert>
+            : null
+        }
         <h1 className={style.mainTitle}>Clipboard</h1>
         <p className={style.bdSub}>
           Paste your code into clipboard, <br/>and you can save it in an easy way or share with other easily.
